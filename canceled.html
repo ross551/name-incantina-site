@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment not finished · Name Incantina</title>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main class="center">
+  <img class="logo" src="images/logo.png" alt="Name Incantina" style="width:min(280px,100%)">
+  <h1>Payment not finished</h1>
+  <p>Nothing was charged and your table hasn't been opened. You can go back and pay whenever you're ready.</p>
+  <p id="back" hidden><a class="button" id="backLink" href="#">Back to the app</a></p>
+  <p><a class="button ghost" href="host.html">Host a table on the web</a></p>
+</main>
+<script>
+const table = new URLSearchParams(location.search).get("table") || "";
+const appLink = "nameincantina://checkout?status=canceled&table=" + encodeURIComponent(table);
+if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+  document.getElementById("back").hidden = false;
+  document.getElementById("backLink").href = appLink;
+  location.href = appLink;
+}
+</script>
+</body>
+</html>
