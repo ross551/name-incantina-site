@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Name Incantina Payouts</title>
+<style>
+  body { background: #14100c; color: #efe6d8; font: 17px/1.6 Georgia, serif; margin: 0; padding: 48px 16px; text-align: center; }
+  main { max-width: 480px; margin: 0 auto; }
+  h1 { color: #c9a24a; font-size: 26px; }
+  p { color: #efe6d8; }
+  .muted { color: #b9ab95; font-size: 15px; }
+</style>
+</head>
+<body>
+<main>
+<h1 id="t">Payout setup saved</h1>
+<p id="m">You can close this page and go back to Name Incantina. Your Tab shows whether payouts are ready.</p>
+<p class="muted">Winnings of $25 or more are paid once a month to the account you connected.</p>
+</main>
+<script>
+  if (new URLSearchParams(location.search).get("again")) {
+    document.getElementById("t").textContent = "Let's try that again";
+    document.getElementById("m").textContent = "The setup link expired. Go back to Name Incantina and tap Set up payouts again.";
+  }
+</script>
+</body>
+</html>
