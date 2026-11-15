@@ -203,18 +203,27 @@ $("table").addEventListener("submit", async (e) => {
   const list = (s) => s.split(",").map((w) => w.trim()).filter(Boolean).slice(0, 8);
   // The trademark classes come from the brief (same AI step as the app); skipped if it is slow.
   let niceClass = "";
+  const reviewFlags = [];
   try {
     const classify = sb.functions.invoke("name-review", { body: { mode: "classify", title, brief, entityType: room } });
     const timeout = new Promise((r) => setTimeout(() => r({ data: null }), 15000));
     const { data } = await Promise.race([classify, timeout]);
     niceClass = data?.niceClass ?? "";
+    // The same AI call judges the brief itself: sexual, hateful or illegal briefs can't be posted.
+    if (data?.content === "blocked") {
+      err.textContent = `This brief can't be posted${data.contentReason ? ": " + data.contentReason : "."} Name Incantina is a family-friendly lounge.`;
+      pay.disabled = false;
+      totals();
+      return;
+    }
+    if (data?.content === "review") reviewFlags.push("AI: " + (data.contentReason || "sensitive topic"));
   } catch { /* fine without */ }
 
   const table = {
     title, brief, room, category: room, tier: l.tier,
     table: TABLE_NAMES[Math.floor(Math.random() * TABLE_NAMES.length)],
     vibe: list($("vibe").value), avoid: list($("avoid").value), niceClass,
-    prizes: ps, passMark: Number(picked("bar")), lastCallMinutes: Number(picked("clock")), reviewFlags: [],
+    prizes: ps, passMark: Number(picked("bar")), lastCallMinutes: Number(picked("clock")), reviewFlags,
   };
   const { data, error } = await sb.functions.invoke("checkout", { body: { action: "create", table } });
   if (data?.url) { location.href = data.url; return; }
