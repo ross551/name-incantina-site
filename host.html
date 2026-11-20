@@ -32,8 +32,8 @@
       <h2 style="margin-top:0">The brief</h2>
       <label for="title">What's being named?</label>
       <input id="title" maxlength="60" placeholder="e.g. Small-batch hot sauce" required>
-      <label for="brief">Describe the product, audience and feel</label>
-      <textarea id="brief" maxlength="280" required></textarea>
+      <label for="brief">Describe the product, audience and feel (optional)</label>
+      <textarea id="brief" maxlength="280"></textarea>
       <label for="vibe">Vibe words, comma separated (optional)</label>
       <input id="vibe">
       <label for="avoid">Words to avoid, comma separated (optional)</label>
@@ -190,9 +190,8 @@ $("table").addEventListener("submit", async (e) => {
   const ps = prizes();
   const pot = ps.reduce((a, b) => a + b, 0);
   const title = $("title").value.trim();
-  const brief = $("brief").value.trim();
-  const problem = !title ? "Give the brief a title."
-    : !brief ? "Write a short brief so creators know what they're naming."
+  const brief = $("brief").value.trim() || title; // optional: falls back to what is being named
+  const problem = !title ? "Say what's being named."
     : !ps.every((p) => Number.isInteger(p) && p > 0) ? "Every paid place needs a whole-dollar amount."
     : pot < l.minPot ? `${l.label} briefs need a Creative Fee pool of at least $${l.minPot}.`
     : ps.some((p, i) => i > 0 && p > ps[i - 1]) ? "Creative Fees should go down from 1st to 3rd."
