@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Host a Table · Name Incantina</title>
+<title>Post a Brief · Name Incantina</title>
 <link rel="stylesheet" href="site.css">
 </head>
 <body>
 <main>
   <a href="index.html"><img class="logo" src="images/logo.png" alt="Name Incantina" style="width:min(280px,100%)"></a>
-  <h1>Host a table</h1>
-  <p class="muted">Post a brief and a prize. The lounge pours names; you pick the winners. Same account as the app.</p>
+  <h1>Post a Brief</h1>
+  <p class="muted">Post a Naming Brief and a Creative Fee. Creators in the lounge pour names; you choose the ones you want. Same account as the app.</p>
 
   <!-- Sign in -->
   <div id="signin" class="card" hidden>
@@ -43,12 +43,12 @@
     </div>
 
     <div class="card">
-      <h2 style="margin-top:0">Table level</h2>
+      <h2 style="margin-top:0">Brief level</h2>
       <div class="choices" id="levels" style="flex-direction:column"></div>
     </div>
 
     <div class="card">
-      <h2 style="margin-top:0">Prizes</h2>
+      <h2 style="margin-top:0">Creative Fees</h2>
       <label>Places paid</label>
       <div class="choices" id="places"></div>
       <div class="row" id="prizeInputs"></div>
@@ -65,31 +65,34 @@
 
     <div class="card">
       <h2 style="margin-top:0">Checkout</h2>
-      <div class="totals"><span>Prize pool (paid in full to the winning namers)</span><span id="pot">$0</span></div>
-      <div class="totals"><span id="feeLabel">Table fee</span><span id="fee">$0</span></div>
+      <div class="totals"><span>Creative Fee pool (paid in full to the creators of the selected names)</span><span id="pot">$0</span></div>
+      <div class="totals"><span id="feeLabel">Naming service fee</span><span id="fee">$0</span></div>
       <div class="totals strong"><span>Total</span><span id="total">$0</span></div>
+      <p>You are buying a commercial brand-naming service: creators develop names for your brief, and the IP rights in
+        each name you select are assigned to you. Creative Fees are paid in full to the creators of the selected names;
+        the naming service fee covers the service.</p>
       <p class="faint">You pay on Stripe's secure page (card, Google Pay or Apple Pay). Once payment clears, the house
-        takes a quick look, usually within a few hours, and the last call clock starts when the table opens. If we
-        can't approve it, you get a full refund. If no name clears your bar, the prize pool is refunded (the table fee
-        is kept).</p>
+        takes a quick look, usually within a few hours, and the last call clock starts when the brief opens. If we
+        can't approve it, you get a full refund. If no name clears your bar, the Creative Fee pool is refunded (the
+        naming service fee is kept).</p>
     </div>
 
     <div class="card notice">
       <h2 style="margin-top:0">Name generation only</h2>
       <ul>
-        <li>Name Incantina is a name generation service. Players suggest names; we don't give legal advice.</li>
+        <li>Name Incantina is a name generation service. Creators suggest names; we don't give legal advice.</li>
         <li>Names developed with Name Incantina are not guaranteed to be available: for trademark registration, as a domain, or for use in business.</li>
         <li>GoalieIP ratings are a screening estimate, not a trademark search or clearance opinion.</li>
         <li>There is no guarantee of a name's effectiveness, in marketing, sales or otherwise.</li>
-        <li>Before you use or file a winning name, have it cleared by a trademark professional.</li>
+        <li>Before you use or file a selected name, have it cleared by a trademark professional.</li>
       </ul>
       <label class="check"><input type="checkbox" id="agree"> I understand Name Incantina generates names only, and that names are not guaranteed to be available or effective.</label>
     </div>
 
     <p id="formError" class="error"></p>
-    <p id="notEnabled" class="muted" hidden>Payments open soon. Until then, hosts set up tables in the app.</p>
+    <p id="notEnabled" class="muted" hidden>Payments open soon. Until then, clients post briefs in the app.</p>
     <button id="pay" class="button" type="submit">Pay with Stripe</button>
-    <p class="faint">By hosting you agree to the <a href="privacy.html">Privacy Policy</a> and the contest rules in the app.</p>
+    <p class="faint">By posting a brief you agree to the <a href="privacy.html">Privacy Policy</a> and the brief rules in the app.</p>
   </form>
 
   <footer><a href="index.html">Name Incantina</a> · <a href="privacy.html">Privacy</a></footer>
@@ -105,10 +108,10 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 // Same choices and rules as the app (src/app/incantations/new.tsx, src/lib/tiers.ts).
 const ROOMS = ["Business", "Product", "Service", "App"];
 const LEVELS = [
-  { tier: "double-blind", label: "Double-Blind", fee: 150, minPot: 250, prizes: [150, 70, 30], summary: "Nothing is ever published. Winners are told they placed, but not which table." },
-  { tier: "secure", label: "Secure", fee: 100, minPot: 100, prizes: [60, 30, 10], summary: "Nothing is published. Winners are told privately which table they won." },
-  { tier: "open-vote", label: "Open Vote", fee: 55, minPot: 50, prizes: [30, 15, 5], summary: "You send 2 to 5 finalists to a public vote. Only the winners are published." },
-  { tier: "open", label: "Open No Vote", fee: 35, minPot: 50, prizes: [30, 15, 5], summary: "You pick the winners. Only the winners are published." },
+  { tier: "double-blind", label: "Double-Blind", fee: 150, minPot: 250, prizes: [150, 70, 30], summary: "Nothing is ever published. Creators of selected names are told their name was chosen, but not for which brief." },
+  { tier: "secure", label: "Secure", fee: 100, minPot: 100, prizes: [60, 30, 10], summary: "Nothing is published. Creators of selected names are told privately which brief chose their name." },
+  { tier: "open-vote", label: "Open Vote", fee: 55, minPot: 50, prizes: [30, 15, 5], summary: "You send 2 to 5 finalists to a public vote. Only the selected names are published." },
+  { tier: "open", label: "Open No Vote", fee: 35, minPot: 50, prizes: [30, 15, 5], summary: "You choose the names. Only the selected names are published." },
 ];
 const BARS = [65, 70, 75, 80, 85];
 const CLOCKS = [["1 hour", 60], ["6 hours", 360], ["1 day", 1440], ["3 days", 4320]];
@@ -138,9 +141,9 @@ function totals() {
   const l = level();
   $("pot").textContent = `$${pot}`;
   $("fee").textContent = `$${l.fee}`;
-  $("feeLabel").textContent = `${l.label} table fee`;
+  $("feeLabel").textContent = `${l.label} naming service fee`;
   $("total").textContent = `$${pot + l.fee}`;
-  $("minPot").textContent = `${l.label} tables need a prize pool of at least $${l.minPot}.`;
+  $("minPot").textContent = `${l.label} briefs need a Creative Fee pool of at least $${l.minPot}.`;
   $("pay").textContent = `Pay $${pot + l.fee} with Stripe`;
 }
 
@@ -188,11 +191,11 @@ $("table").addEventListener("submit", async (e) => {
   const pot = ps.reduce((a, b) => a + b, 0);
   const title = $("title").value.trim();
   const brief = $("brief").value.trim();
-  const problem = !title ? "Give the table a title."
-    : !brief ? "Write a short brief so players know what they're naming."
+  const problem = !title ? "Give the brief a title."
+    : !brief ? "Write a short brief so creators know what they're naming."
     : !ps.every((p) => Number.isInteger(p) && p > 0) ? "Every paid place needs a whole-dollar amount."
-    : pot < l.minPot ? `${l.label} tables need a prize pool of at least $${l.minPot}.`
-    : ps.some((p, i) => i > 0 && p > ps[i - 1]) ? "Prizes should go down from 1st to 3rd."
+    : pot < l.minPot ? `${l.label} briefs need a Creative Fee pool of at least $${l.minPot}.`
+    : ps.some((p, i) => i > 0 && p > ps[i - 1]) ? "Creative Fees should go down from 1st to 3rd."
     : !$("agree").checked ? "Please acknowledge the notice above." : null;
   if (problem) { err.textContent = problem; return; }
 
